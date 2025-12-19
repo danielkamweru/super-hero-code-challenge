@@ -13,4 +13,4 @@ register_routes(app)
 
 # Run the application in debug mode if executed directly
 if __name__ == '__main__':
-    app.run(debug=True, port=5006)
+    app.run(debug=True, port=5007)
