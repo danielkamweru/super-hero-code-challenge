@@ -2,11 +2,13 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
+from flask_mail import Mail
 
 from app.config import Config
 
 db = SQLAlchemy()
 migrate = Migrate()
+mail = Mail()
 
 
 def create_app(config_class: type[Config] = Config) -> Flask:
@@ -24,10 +26,15 @@ def create_app(config_class: type[Config] = Config) -> Flask:
     # Initialise extensions
     db.init_app(app)
     migrate.init_app(app, db)
+    mail.init_app(app)
 
     # Import models so they are registered with SQLAlchemy metadata
     with app.app_context():
-        from app import models  # noqa: F401
+        from app import models
+
+    # Register routes
+    from app.routes import register_routes
+    register_routes(app)
 
     return app
 

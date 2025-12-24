@@ -1,4 +1,4 @@
-import os
+pwfimport os
 
 class Config:
     SQLALCHEMY_DATABASE_URI = 'sqlite:///superheroes.db'
