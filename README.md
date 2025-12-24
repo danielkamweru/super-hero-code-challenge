@@ -16,6 +16,7 @@ This is a Phase 4 code challenge project that provides a backend API for a super
 - **RESTful Design**: Follows REST principles with proper HTTP status codes and JSON responses
 - **Database Migrations**: Uses Flask-Migrate for database schema management
 - **CORS Support**: Enabled for cross-origin requests
+- **Email Notifications**: Sends email notifications when new hero-power associations are created (requires SMTP configuration)
 
 ## Technologies Used
 
@@ -23,6 +24,7 @@ This is a Phase 4 code challenge project that provides a backend API for a super
 - **Flask-SQLAlchemy**: ORM for database interactions
 - **Flask-Migrate**: Database migration management
 - **Flask-CORS**: Cross-origin resource sharing
+- **Flask-Mail**: Email sending functionality
 - **SQLite**: Database for development (easily configurable for production)
 - **Python 3.12+**: Programming language
 
@@ -55,7 +57,7 @@ Phase4-codechallenge-1/
 
 ### Prerequisites
 
-- Python 3.12 or higher
+- Python 3.12.3
 - pip (Python package installer)
 
 ### Setup Steps
@@ -109,6 +111,21 @@ python3 seed.py
 
 This creates sample heroes (Superman, Wonder Woman, Invisible Woman) and powers (Flight, Super Strength, Invisibility) with their associations.
 
+## Email Configuration
+
+The application sends email notifications when hero-power associations are created. To configure email:
+
+1. Set environment variables (recommended for security):
+   ```bash
+   export MAIL_USERNAME='your-email@gmail.com'
+   export MAIL_PASSWORD='your-app-specific-password'
+   export MAIL_DEFAULT_SENDER='your-email@gmail.com'
+   ```
+
+2. For Gmail, you'll need to generate an [app-specific password](https://support.google.com/accounts/answer/185833) if you have 2-factor authentication enabled.
+
+3. If environment variables are not set, the app will use default values from config.py.
+
 ## Running the Application
 
 Start the development server:
@@ -117,7 +134,7 @@ Start the development server:
 python3 app.py
 ```
 
-The API will be available at `http://127.0.0.1:5002` (or the port specified in `app.py`).
+The API will be available at `http://127.0.0.1:5007` (or the port specified in `app.py`).
 
 ## API Endpoints
 
@@ -171,6 +188,7 @@ The API will be available at `http://127.0.0.1:5002` (or the port specified in `
   - Body: `{"strength": "Strong", "hero_id": 1, "power_id": 2}`
   - Strength values: "Strong", "Weak", "Average"
   - Response: Created hero-power association with nested hero and power data
+  - Triggers email notification to configured recipient
 
 - **DELETE /hero_powers/<id>**
   - Deletes a specific hero-power association
