@@ -1,6 +1,7 @@
 from flask import jsonify, request
+from flask_mail import Message
 from app.models import Hero, Power, HeroPower
-from app import db
+from app import db, mail
 
 
 def register_routes(app):
@@ -29,6 +30,18 @@ def register_routes(app):
 
             db.session.add(hp)
             db.session.commit()
+
+            # Send email notification
+            try:
+                msg = Message(
+                    subject=f"New Hero-Power Association: {hero.super_name} + {power.name}",
+                    recipients=['kamwerudaniel5@gmail.com'],  # Send to user's email
+                    body=f"A new hero-power association has been created:\n\nHero: {hero.super_name} ({hero.name})\nPower: {power.name}\nStrength: {hp.strength}"
+                )
+                mail.send(msg)
+            except Exception as e:
+                # Log email error but don't fail the request
+                print(f"Email sending failed: {e}")
 
             return jsonify({
                 "id": hp.id,
