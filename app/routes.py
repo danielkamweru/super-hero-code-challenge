@@ -8,7 +8,20 @@ def register_routes(app):
 
     
     # HERO POWERS
-    
+
+    @app.get('/hero_powers')
+    def get_hero_powers():
+        hero_powers = HeroPower.query.all()
+        return jsonify([{
+            "id": hp.id,
+            "hero_id": hp.hero_id,
+            "power_id": hp.power_id,
+            "strength": hp.strength,
+            "hero": hp.hero.to_dict(),
+            "power": hp.power.to_dict()
+        } for hp in hero_powers]), 200
+
+
     @app.post('/hero_powers')
     def create_hero_power():
         try:
@@ -35,7 +48,7 @@ def register_routes(app):
             try:
                 msg = Message(
                     subject=f"New Hero-Power Association: {hero.super_name} + {power.name}",
-                    recipients=['kamwerudaniel5@gmail.com'],  # Send to user's email
+                    recipients=['kamwerudaniel5@gmail.com'],  
                     body=f"A new hero-power association has been created:\n\nHero: {hero.super_name} ({hero.name})\nPower: {power.name}\nStrength: {hp.strength}"
                 )
                 mail.send(msg)
